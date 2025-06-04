@@ -1,27 +1,36 @@
 async function getWeather() {
-  const city = document.getElementById('cityInput').value;
-  const apiKey = 'your_api_key_here'; // Replace with your actual API key
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-
-  const response = await fetch(url);
-  const data = await response.json();
-
+  const city = document.getElementById('cityInput').value.trim();
+  const apiKey = 'your_actual_api_key'; // Replace this with your real key
   const resultDiv = document.getElementById('weatherResult');
 
-  if (data.cod === 200) {
-    const iconUrl = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
-    const weatherHTML = `
-      <h2>${data.name}, ${data.sys.country}</h2>
-      <img src="${iconUrl}" alt="Weather icon">
-      <p>🌡️ Temperature: ${data.main.temp}°C</p>
-      <p>☁️ Weather: ${data.weather[0].description}</p>
-      <p>💨 Wind: ${data.wind.speed} m/s</p>
-    `;
-    resultDiv.innerHTML = weatherHTML;
-    document.body.style.backgroundImage = getBackgroundImage(data.weather[0].main);
-    document.body.style.backgroundSize = 'cover';
-  } else {
-    resultDiv.innerHTML = "<p>❌ City not found!</p>";
+  if (!city) {
+    resultDiv.innerHTML = "<p>⚠️ Please enter a city name!</p>";
+    return;
+  }
+
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log(data); // Debug: see what you get back
+
+    if (data.cod === 200) {
+      const iconUrl = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+      resultDiv.innerHTML = `
+        <h2>${data.name}, ${data.sys.country}</h2>
+        <img src="${iconUrl}" alt="Weather icon">
+        <p>🌡️ Temperature: ${data.main.temp}°C</p>
+        <p>☁️ Weather: ${data.weather[0].description}</p>
+        <p>💨 Wind: ${data.wind.speed} m/s</p>
+      `;
+      document.body.style.backgroundImage = getBackgroundImage(data.weather[0].main);
+    } else {
+      resultDiv.innerHTML = `<p>❌ City not found (${data.message})</p>`;
+    }
+  } catch (error) {
+    console.error("Error fetching weather:", error);
+    resultDiv.innerHTML = "<p>🚫 Failed to fetch weather data.</p>";
   }
 }
 
