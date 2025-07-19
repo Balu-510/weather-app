@@ -1,56 +1,63 @@
-async function getWeather() {
-  const city = document.getElementById('cityInput').value.trim();
-  const apiKey = 'your_actual_api_key'; // Replace this with your real key
-  const resultDiv = document.getElementById('weatherResult');
-
-  if (!city) {
-    resultDiv.innerHTML = "<p>⚠️ Please enter a city name!</p>";
-    return;
-  }
-
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`;
-
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    console.log(data); // Debug: see what you get back
-
-    if (data.cod === 200) {
-      const iconUrl = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
-      resultDiv.innerHTML = `
-        <h2>${data.name}, ${data.sys.country}</h2>
-        <img src="${iconUrl}" alt="Weather icon">
-        <p>🌡️ Temperature: ${data.main.temp}°C</p>
-        <p>☁️ Weather: ${data.weather[0].description}</p>
-        <p>💨 Wind: ${data.wind.speed} m/s</p>
-      `;
-      document.body.style.backgroundImage = getBackgroundImage(data.weather[0].main);
-    } else {
-      resultDiv.innerHTML = `<p>❌ City not found (${data.message})</p>`;
+class WeatherApp {
+    constructor() {
+        // API Configuration - Replace with your actual API key
+        this.API_KEY = 'YOUR_OPENWEATHER_API_KEY'; // Get this from openweathermap.org
+        this.BASE_URL = 'https://api.openweathermap.org/data/2.5';
+        
+        // App state
+        this.currentUnit = 'metric'; // 'metric' for Celsius, 'imperial' for Fahrenheit
+        this.currentWeatherData = null;
+        
+        // Weather icon mapping
+        this.weatherIcons = {
+            '01d': '☀️', '01n': '🌙', // clear sky
+            '02d': '⛅', '02n': '☁️', // few clouds
+            '03d': '☁️', '03n': '☁️', // scattered clouds
+            '04d': '☁️', '04n': '☁️', // broken clouds
+            '09d': '🌧️', '09n': '🌧️', // shower rain
+            '10d': '🌦️', '10n': '🌧️', // rain
+            '11d': '⛈️', '11n': '⛈️', // thunderstorm
+            '13d': '❄️', '13n': '❄️', // snow
+            '50d': '🌫️', '50n': '🌫️'  // mist
+        };
+        
+        // Initialize when DOM is ready
+        this.init();
     }
-  } catch (error) {
-    console.error("Error fetching weather:", error);
-    resultDiv.innerHTML = "<p>🚫 Failed to fetch weather data.</p>";
-  }
-}
-
-function getBackgroundImage(condition) {
-  switch (condition.toLowerCase()) {
-    case 'clear':
-      return "url('https://source.unsplash.com/1600x900/?clear-sky')";
-    case 'clouds':
-      return "url('https://source.unsplash.com/1600x900/?cloudy')";
-    case 'rain':
-    case 'drizzle':
-      return "url('https://source.unsplash.com/1600x900/?rain')";
-    case 'thunderstorm':
-      return "url('https://source.unsplash.com/1600x900/?thunderstorm')";
-    case 'snow':
-      return "url('https://source.unsplash.com/1600x900/?snow')";
-    case 'mist':
-    case 'fog':
-      return "url('https://source.unsplash.com/1600x900/?fog')";
-    default:
-      return "url('https://source.unsplash.com/1600x900/?weather')";
-  }
-}
+    
+    /**
+     * Initialize the application
+     */
+    init() {
+        // Wait for DOM to be ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => this.setupApp());
+        } else {
+            this.setupApp();
+        }
+    }
+    
+    /**
+     * Setup application after DOM is loaded
+     */
+    setupApp() {
+        // Get DOM elements
+        this.getDOMElements();
+        
+        // Load user preferences
+        this.loadPreferences();
+        
+        // Bind event listeners
+        this.bindEventListeners();
+        
+        // Update current date/time
+        this.updateCurrentDateTime();
+        
+        console.log('Weather App initialized successfully!');
+    }
+    
+    /**
+     * Get all required DOM elements
+     */
+    getDOMElements() {
+        // Form element
