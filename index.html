@@ -1,18 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Weather App</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Web App</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container text-center mt-5">
-    <h1 class="mb-4">🌤️ Weather App</h1>
-    <input type="text" id="cityInput" class="form-control mb-2" placeholder="Enter City">
-    <button onclick="getWeather()" class="btn btn-primary mb-4">Get Weather</button>
-    <div id="weatherResult" class="card p-3 shadow-lg"></div>
-  </div>
-  <script src="script.js"></script>
-</body>
-</html>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <h1 class="app-title">Weather Web App</h1>
+            <form class="search-form" id="search-form">
+                <div class="search-container">
+                    <input 
+                        type="text" 
+                        class="form-control search-input" 
+                        id="city-input"
+                        placeholder="Enter city name..."
+                        aria-label="Enter city name"
+                        autocomplete="off"
+                    >
+                    <button type="submit" class="btn search-btn" aria-label="Search weather">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="21 21l-4.35-4.35"></path>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+            <button class="btn btn--secondary unit-toggle" id="unit-toggle">°C</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Welcome Message (initially shown) -->
+            <div class="welcome-section" id="welcome-section">
+                <div class="welcome-card">
+                    <h2>Welcome to Weather Web App</h2>
+                    <p>Search for a city to get current weather information, or allow location access for local weather.</p>
+                    <button class="btn btn--primary" id="location-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColo
+Asset 1 of 1
