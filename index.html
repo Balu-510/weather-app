@@ -1,45 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Web App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <title>Weather App</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <!-- Header Section -->
-    <header class="header">
-        <div class="container">
-            <h1 class="app-title">Weather Web App</h1>
-            <form class="search-form" id="search-form">
-                <div class="search-container">
-                    <input 
-                        type="text" 
-                        class="form-control search-input" 
-                        id="city-input"
-                        placeholder="Enter city name..."
-                        aria-label="Enter city name"
-                        autocomplete="off"
-                    >
-                    <button type="submit" class="btn search-btn" aria-label="Search weather">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <path d="21 21l-4.35-4.35"></path>
-                        </svg>
-                    </button>
-                </div>
-            </form>
-            <button class="btn btn--secondary unit-toggle" id="unit-toggle">°C</button>
-        </div>
-    </header>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="container">
-            <!-- Welcome Message (initially shown) -->
-            <div class="welcome-section" id="welcome-section">
-                <div class="welcome-card">
-                    <h2>Welcome to Weather Web App</h2>
-                    <p>Search for a city to get current weather information, or allow location access for local weather.</p>
-                    <button class="btn btn--primary" id="location-btn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColo
+<body>
+    <div class="wrapper">
+        <h1>Weather App</h1>
+        <div class="tab-container">
+            <p class="tab" data-userWeather>Your Weather</p>
+            <p class="tab" data-searchWeather>Search Weather</p>
+        </div>
+        <!-- Container -->
+        <div class="weather-container">
+         
+         
+            <!-- grant location access -->
+            <div class="sub-container grant-location-container">
+                <img src="location.png" width="80" height="80" loading="lazy" />
+                <p>Grant Location Access</p>
+                <p data-messageText>Allow Access To Get Weather Information</p>
+                <button class="btn" data-grantAccess>Grant Access</button>
+            </div>
+
+
+            <!-- search country form -->
+            <form class="form-container" data-searchForm>
+                <input placeholder="Search for city ..." data-searchInp />
+                <button class="btn" type="submit">
+                    <img src="search.png" width="20" height="20" loading="lazy" />
+                </button>
+            </form>
+
+
+            <!-- loading screen container -->
+            <div class="sub-container loading-container">
+                <img src="loading.gif" width="150" height="150" />
+                <p>Loading</p>
+            </div>
+
+
+            <!-- show weather info -->
+            <div class="sub-container user-info-container">
+                <div class="name">
+                    <p data-cityName></p>
+                    <img crossorigin="anonymous" data-countryIcon />
+                </div>
+                <p data-weatherDesc></p>
+                <img data-weatherIcon />
+                <p data-temp></p>
+                <div class="parameter-container">
+                    <div class="parameter">
+                        <img src="wind.png" />
+                        <p class="parameter-title">windspeed</p>
+                        <p class="parameter-value" data-windspeed></p>
+                    </div>
+                    <div class="parameter">
+                        <img src="humidity.png" />
+                        <p class="parameter-title">humidity</p>
+                        <p class="parameter-value" data-humidity></p>
+                    </div>
+                    <div class="parameter">
+                        <img src="cloud.png" />
+                        <p class="parameter-title">clouds</p>
+                        <p class="parameter-value" data-cloudiness></p>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- handle api fetch error -->
+            <div class="sub-container api-error-container">
+                <img src="not-found.png" data-notFoundImg />
+                <p data-apiErrorText></p>
+                <button class="btn" data-apiErrorBtn>Retry</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+
+</body>
+
+</html>
